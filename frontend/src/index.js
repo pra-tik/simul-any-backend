@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Route, Link, BrowserRouter as Router, Routes } from 'react-router-dom'  
-
+import Home from './Components/Home'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -12,7 +12,7 @@ root.render(
   <Router>
   <Routes>
       <Route path="/" element={<App />} />
-      <Route path="/marketplace" element={<App />} />
+      <Route path="/Home" element={<Home />} />
       <Route path="/develop" element={<App />} />
       </Routes>
 </Router>
