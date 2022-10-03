@@ -31,9 +31,34 @@ func loginHandler(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var tempmail = req.Form.Get("email")
-	fmt.Fprint(res, tempmail)
+	var response = JsonResponse{}
+	ctx := context.Background()
+	conf := &firebase.Config{ProjectID: "simulate-anything"}
+	app, err := firebase.NewApp(ctx, conf)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
+	client, err := app.Firestore(ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer client.Close()
+
+	dsnap, err := client.Collection("users").Doc(req.Form.Get("email_id")).Get(ctx)
+	m := dsnap.Data()
+	if err != nil {
+		response = JsonResponse{Type: "failed", Message: "Invalid Credentials"}
+	} else {
+		val := m["password"].(string)
+		if err = bcrypt.CompareHashAndPassword([]byte(val), []byte(req.Form.Get("password"))); err != nil {
+			response = JsonResponse{Type: "failed", Message: "Invalid Credentials"}
+		} else {
+			response = JsonResponse{Type: "success", Message: "Valid Login", Name: fmt.Sprint(m["fname"])}
+		}
+	}
+
+	json.NewEncoder(res).Encode(response)
 }
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
