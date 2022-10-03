@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -35,13 +34,6 @@ func loginHandler(res http.ResponseWriter, req *http.Request) {
 	var tempmail = req.Form.Get("email")
 	fmt.Fprint(res, tempmail)
 
-}
-
-type TempData struct {
-	first_name string `json:"first_name"`
-	last_name  string `json:"last_name"`
-	email_id   string `json:"email_id"`
-	password   string `json:"password"`
 }
 
 func registerHandler(res http.ResponseWriter, req *http.Request) {
@@ -71,11 +63,11 @@ func registerHandler(res http.ResponseWriter, req *http.Request) {
 	}
 	defer client.Close()
 
-	m, err := client.Collection("users").Doc(tempd.email_id).Get(ctx)
+	m, err := client.Collection("users").Doc(req.Form.Get("email_id")).Get(ctx)
 	if err != nil {
-		_, err := client.Collection("users").Doc(req.FormValue(tempd.email_id)).Set(ctx, map[string]interface{}{
-			"fname":    string(req.FormValue(tempd.first_name)),
-			"lname":    string(req.FormValue(tempd.last_name)),
+		_, err := client.Collection("users").Doc(req.FormValue("email_id")).Set(ctx, map[string]interface{}{
+			"fname":    string(req.FormValue("first_name")),
+			"lname":    string(req.FormValue("last_name")),
 			"password": string(hashedPassword),
 		})
 		if err != nil {

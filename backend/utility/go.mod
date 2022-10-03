@@ -3,7 +3,6 @@ module github.com/kkoranglekar/simul-any/backend/utility
 go 1.19
 
 require (
-	cloud.google.com/go/firestore v1.6.1
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/gorilla/mux v1.8.0
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
@@ -11,6 +10,7 @@ require (
 
 require (
 	cloud.google.com/go v0.97.0 // indirect
+	cloud.google.com/go/firestore v1.6.1 // indirect
 	cloud.google.com/go/storage v1.10.0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
